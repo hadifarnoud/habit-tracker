@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Habit Tracker</h1>
+        </header>
+
+        <main>
+            <section id="home-view" class="view">
+                <h2>Your Habits</h2>
+                <div id="habit-list"></div>
+            </section>
+
+            <section id="weekly-view" class="view hidden">
+                <h2>Weekly Overview</h2>
+                <div id="weekly-grid"></div>
+            </section>
+
+            <section id="habit-log-view" class="view hidden">
+                <h2 id="habit-log-title"></h2>
+                <ul id="habit-log-list"></ul>
+            </section>
+
+            <section id="add-habit-view" class="view hidden">
+                <h2>Add New Habit</h2>
+                <form id="add-habit-form">
+                    <label for="habit-name">Habit Name:</label>
+                    <input type="text" id="habit-name" required>
+                    
+                    <label for="habit-color">Habit Color:</label>
+                    <input type="color" id="habit-color" required>
+                    
+                    <fieldset>
+                        <legend>Habit Type:</legend>
+                        <label>
+                            <input type="radio" name="habit-type" value="good" checked> Good
+                        </label>
+                        <label>
+                            <input type="radio" name="habit-type" value="bad"> Bad
+                        </label>
+                    </fieldset>
+                    
+                    <button type="submit">Add Habit</button>
+                </form>
+            </section>
+        </main>
+
+        <nav>
+            <button id="home-btn"><i class="fas fa-home"></i><span>Home</span></button>
+            <button id="weekly-btn"><i class="fas fa-calendar-week"></i><span>Weekly</span></button>
+            <button id="add-habit-btn"><i class="fas fa-plus"></i><span>Add</span></button>
+        </nav>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
