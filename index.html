@@ -31,7 +31,33 @@
                 <div id="habit-legend"></div>
             </section>
 
-            <!-- ... (rest of the sections remain the same) ... -->
+            <section id="habit-log-view" class="view hidden">
+                <h2 id="habit-log-title"></h2>
+                <ul id="habit-log-list"></ul>
+            </section>
+
+            <section id="add-habit-view" class="view hidden">
+                <h2>Add New Habit</h2>
+                <form id="add-habit-form">
+                    <label for="habit-name">Habit Name:</label>
+                    <input type="text" id="habit-name" required>
+
+                    <label for="habit-color">Habit Color:</label>
+                    <input type="color" id="habit-color" required>
+
+                    <fieldset>
+                        <legend>Habit Type:</legend>
+                        <label>
+                            <input type="radio" name="habit-type" value="good" checked> Good
+                        </label>
+                        <label>
+                            <input type="radio" name="habit-type" value="bad"> Bad
+                        </label>
+                    </fieldset>
+
+                    <button type="submit">Add Habit</button>
+                </form>
+            </section>
         </main>
 
         <nav>
