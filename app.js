@@ -102,4 +102,96 @@ function renderMonthlyView() {
         habits.forEach(habit => {
             const hasEntry = habit.log.some(entry => {
                 const entryDate = new Date(entry);
-                return entryDate.toDateString() === date.to
+                return entryDate.toDateString() === date.toDateString();
+            });
+            if (hasEntry) {
+                const marker = document.createElement('span');
+                marker.className = `habit-marker ${habit.type}`;
+                marker.style.backgroundColor = habit.color;
+                habitMarkers.appendChild(marker);
+            }
+        });
+    }
+}
+
+function renderHabitLog(habit) {
+    habitLogTitle.textContent = `${habit.name} Log`;
+    habitLogList.innerHTML = '';
+    habit.log.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = new Date(entry).toLocaleString();
+        habitLogList.appendChild(li);
+    });
+}
+
+// Habit functions
+function addHabit(event) {
+    event.preventDefault();
+    const name = document.getElementById('habit-name').value;
+    const color = document.getElementById('habit-color').value;
+    const type = document.querySelector('input[name="habit-type"]:checked').value;
+    habits.push({ name, color, type, log: [] });
+    saveHabits();
+    showHomeView();
+}
+
+function trackHabit(index) {
+    habits[index].log.push(new Date());
+    saveHabits();
+    renderHabitList();
+    showTrackingSuccessMessage(habits[index].name);
+}
+
+function editHabit(index) {
+    const habit = habits[index];
+    document.getElementById('habit-name').value = habit.name;
+    document.getElementById('habit-color').value = habit.color;
+    document.querySelector(`input[name="habit-type"][value="${habit.type}"]`).checked = true;
+    
+    addHabitTitle.textContent = 'Edit Habit';
+    habitSubmitBtn.textContent = 'Save Changes';
+    
+    addHabitForm.onsubmit = (event) => {
+        event.preventDefault();
+        habit.name = document.getElementById('habit-name').value;
+        habit.color = document.getElementById('habit-color').value;
+        habit.type = document.querySelector('input[name="habit-type"]:checked').value;
+        saveHabits();
+        resetAddHabitForm();
+        showHomeView();
+    };
+    
+    showAddHabitView();
+}
+
+function deleteHabit(index) {
+    if (confirm('Are you sure you want to delete this habit?')) {
+        habits.splice(index, 1);
+        saveHabits();
+        renderHabitList();
+    }
+}
+
+function saveHabits() {
+    localStorage.setItem('habits', JSON.stringify(habits));
+}
+
+function resetAddHabitForm() {
+    addHabitForm.reset();
+    addHabitTitle.textContent = 'Add New Habit';
+    habitSubmitBtn.textContent = 'Add Habit';
+    addHabitForm.onsubmit = addHabit;
+}
+
+function showTrackingSuccessMessage(habitName) {
+    const message = document.createElement('div');
+    message.textContent = `${habitName} successfully tracked!`;
+    message.className = 'success-message';
+    document.body.appendChild(message);
+    setTimeout(() => {
+        message.remove();
+    }, 3000);
+}
+
+// Initial render
+showHomeView();
