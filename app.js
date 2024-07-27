@@ -1,27 +1,133 @@
-// ... (previous code remains the same) ...
-
-// DOM Elements (add these)
+// DOM Elements
+const homeView = document.getElementById('home-view');
 const monthlyView = document.getElementById('monthly-view');
+const habitLogView = document.getElementById('habit-log-view');
+const addHabitView = document.getElementById('add-habit-view');
+const habitList = document.getElementById('habit-list');
 const monthlyGrid = document.getElementById('monthly-grid');
+const habitLogList = document.getElementById('habit-log-list');
+const habitLogTitle = document.getElementById('habit-log-title');
+const addHabitForm = document.getElementById('add-habit-form');
+const notification = document.getElementById('notification');
+const habitLegend = document.getElementById('habit-legend');
 const currentMonthSpan = document.getElementById('current-month');
 const prevMonthBtn = document.getElementById('prev-month');
 const nextMonthBtn = document.getElementById('next-month');
-const habitLegend = document.getElementById('habit-legend');
 
-// Navigation (update this)
+// Navigation
+document.getElementById('home-btn').addEventListener('click', showHomeView);
 document.getElementById('monthly-btn').addEventListener('click', showMonthlyView);
+document.getElementById('add-habit-btn').addEventListener('click', showAddHabitView);
 
-// Current date for monthly view
+// Data structure
+let habits = [];
 let currentDate = new Date();
 
-// View functions (add this)
+// Load habits from IndexedDB
+function loadHabits() {
+    const dbName = 'HabitTrackerDB';
+    const dbVersion = 1;
+    const request = indexedDB.open(dbName, dbVersion);
+
+    request.onerror = function(event) {
+        console.error("IndexedDB error:", event.target.error);
+    };
+
+    request.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction(['habits'], 'readonly');
+        const objectStore = transaction.objectStore('habits');
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = function(event) {
+            habits = event.target.result;
+            renderHabitList();
+        };
+    };
+
+    request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        db.createObjectStore('habits', { keyPath: 'id', autoIncrement: true });
+    };
+}
+
+// Save habits to IndexedDB
+function saveHabits() {
+    const dbName = 'HabitTrackerDB';
+    const dbVersion = 1;
+    const request = indexedDB.open(dbName, dbVersion);
+
+    request.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction(['habits'], 'readwrite');
+        const objectStore = transaction.objectStore('habits');
+
+        // Clear existing habits
+        const clearRequest = objectStore.clear();
+
+        clearRequest.onsuccess = function() {
+            // Add all habits
+            habits.forEach(function(habit) {
+                objectStore.add(habit);
+            });
+        };
+    };
+}
+
+// View functions
+function showHomeView() {
+    hideAllViews();
+    homeView.classList.remove('hidden');
+    renderHabitList();
+}
+
 function showMonthlyView() {
     hideAllViews();
     monthlyView.classList.remove('hidden');
     renderMonthlyView();
 }
 
-// Render functions (add this)
+function showHabitLogView(habit) {
+    hideAllViews();
+    habitLogView.classList.remove('hidden');
+    renderHabitLog(habit);
+}
+
+function showAddHabitView() {
+    hideAllViews();
+    addHabitView.classList.remove('hidden');
+}
+
+function hideAllViews() {
+    homeView.classList.add('hidden');
+    monthlyView.classList.add('hidden');
+    habitLogView.classList.add('hidden');
+    addHabitView.classList.add('hidden');
+}
+
+// Render functions
+function renderHabitList() {
+    habitList.innerHTML = '';
+    habits.forEach((habit, index) => {
+        const div = document.createElement('div');
+        div.className = 'habit-item';
+        div.innerHTML = `
+            <div class="habit-color" style="background-color: ${habit.color};"></div>
+            <div class="habit-name">${habit.name}</div>
+            <div class="habit-type ${habit.type}">${habit.type}</div>
+            <button onclick="trackHabit(${index})">Track</button>
+            <button onclick="editHabit(${index})">Edit</button>
+            <button onclick="deleteHabit(${index})">Delete</button>
+        `;
+        div.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                showHabitLogView(habit);
+            }
+        });
+        habitList.appendChild(div);
+    });
+}
+
 function renderMonthlyView() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -35,91 +141,4 @@ function renderMonthlyView() {
     
     // Add days from previous month
     for (let i = 0; i < firstDay.getDay(); i++) {
-        const dayElement = createDayElement(new Date(year, month, -i), true);
-        monthlyGrid.prepend(dayElement);
-    }
-    
-    // Add days of current month
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-        const dayElement = createDayElement(new Date(year, month, i));
-        monthlyGrid.appendChild(dayElement);
-    }
-    
-    // Add days from next month
-    const remainingCells = 42 - monthlyGrid.children.length; // 6 rows * 7 days
-    for (let i = 1; i <= remainingCells; i++) {
-        const dayElement = createDayElement(new Date(year, month + 1, i), true);
-        monthlyGrid.appendChild(dayElement);
-    }
-    
-    renderHabitLegend();
-}
-
-function createDayElement(date, isOtherMonth = false) {
-    const dayElement = document.createElement('div');
-    dayElement.className = `monthly-day${isOtherMonth ? ' other-month' : ''}`;
-    
-    const dayNumber = document.createElement('div');
-    dayNumber.className = 'monthly-day-number';
-    dayNumber.textContent = date.getDate();
-    dayElement.appendChild(dayNumber);
-    
-    const habitMarkers = document.createElement('div');
-    habitMarkers.className = 'habit-markers';
-    dayElement.appendChild(habitMarkers);
-    
-    habits.forEach(habit => {
-        if (habit.log.some(entry => isSameDay(new Date(entry), date))) {
-            const marker = document.createElement('div');
-            marker.className = `habit-marker ${habit.type}`;
-            marker.style.backgroundColor = habit.color;
-            habitMarkers.appendChild(marker);
-        }
-    });
-    
-    return dayElement;
-}
-
-function renderHabitLegend() {
-    habitLegend.innerHTML = '';
-    habits.forEach(habit => {
-        const legendItem = document.createElement('div');
-        legendItem.className = 'legend-item';
-        
-        const colorSquare = document.createElement('div');
-        colorSquare.className = 'legend-color';
-        colorSquare.style.backgroundColor = habit.color;
-        
-        const habitName = document.createElement('span');
-        habitName.textContent = habit.name;
-        
-        legendItem.appendChild(colorSquare);
-        legendItem.appendChild(habitName);
-        habitLegend.appendChild(legendItem);
-    });
-}
-
-// Helper functions
-function getMonthName(monthIndex) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months[monthIndex];
-}
-
-function isSameDay(date1, date2) {
-    return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
-}
-
-// Event listeners for month navigation
-prevMonthBtn.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderMonthlyView();
-});
-
-nextMonthBtn.addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderMonthlyView();
-});
-
-// ... (rest of the code remains the same) ...
+        const dayElement = createDayElement(new Date(year, month
