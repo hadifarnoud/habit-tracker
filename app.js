@@ -10,7 +10,17 @@ const habitLogTitle = document.getElementById('habit-log-title');
 const addHabitForm = document.getElementById('add-habit-form');
 const addHabitTitle = document.getElementById('add-habit-title');
 const habitSubmitBtn = document.getElementById('habit-submit-btn');
-
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('Service Worker registered successfully:', registration.scope);
+      })
+      .catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+  });
+}
 // Navigation
 document.getElementById('home-btn').addEventListener('click', showHomeView);
 document.getElementById('monthly-btn').addEventListener('click', showMonthlyView);
