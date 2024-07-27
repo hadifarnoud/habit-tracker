@@ -8,11 +8,8 @@ const monthlyGrid = document.getElementById('monthly-grid');
 const habitLogList = document.getElementById('habit-log-list');
 const habitLogTitle = document.getElementById('habit-log-title');
 const addHabitForm = document.getElementById('add-habit-form');
-const notification = document.getElementById('notification');
-const habitLegend = document.getElementById('habit-legend');
-const currentMonthSpan = document.getElementById('current-month');
-const prevMonthBtn = document.getElementById('prev-month');
-const nextMonthBtn = document.getElementById('next-month');
+const addHabitTitle = document.getElementById('add-habit-title');
+const habitSubmitBtn = document.getElementById('habit-submit-btn');
 
 // Navigation
 document.getElementById('home-btn').addEventListener('click', showHomeView);
@@ -20,59 +17,7 @@ document.getElementById('monthly-btn').addEventListener('click', showMonthlyView
 document.getElementById('add-habit-btn').addEventListener('click', showAddHabitView);
 
 // Data structure
-let habits = [];
-let currentDate = new Date();
-
-// Load habits from IndexedDB
-function loadHabits() {
-    const dbName = 'HabitTrackerDB';
-    const dbVersion = 1;
-    const request = indexedDB.open(dbName, dbVersion);
-
-    request.onerror = function(event) {
-        console.error("IndexedDB error:", event.target.error);
-    };
-
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        const transaction = db.transaction(['habits'], 'readonly');
-        const objectStore = transaction.objectStore('habits');
-        const getAllRequest = objectStore.getAll();
-
-        getAllRequest.onsuccess = function(event) {
-            habits = event.target.result;
-            renderHabitList();
-        };
-    };
-
-    request.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        db.createObjectStore('habits', { keyPath: 'id', autoIncrement: true });
-    };
-}
-
-// Save habits to IndexedDB
-function saveHabits() {
-    const dbName = 'HabitTrackerDB';
-    const dbVersion = 1;
-    const request = indexedDB.open(dbName, dbVersion);
-
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        const transaction = db.transaction(['habits'], 'readwrite');
-        const objectStore = transaction.objectStore('habits');
-
-        // Clear existing habits
-        const clearRequest = objectStore.clear();
-
-        clearRequest.onsuccess = function() {
-            // Add all habits
-            habits.forEach(function(habit) {
-                objectStore.add(habit);
-            });
-        };
-    };
-}
+let habits = JSON.parse(localStorage.getItem('habits')) || [];
 
 // View functions
 function showHomeView() {
@@ -96,6 +41,7 @@ function showHabitLogView(habit) {
 function showAddHabitView() {
     hideAllViews();
     addHabitView.classList.remove('hidden');
+    resetAddHabitForm();
 }
 
 function hideAllViews() {
@@ -129,16 +75,31 @@ function renderHabitList() {
 }
 
 function renderMonthlyView() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    
-    currentMonthSpan.textContent = `${getMonthName(month)} ${year}`;
-    
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    
     monthlyGrid.innerHTML = '';
-    
-    // Add days from previous month
-    for (let i = 0; i < firstDay.getDay(); i++) {
-        const dayElement = createDayElement(new Date(year, month
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'monthly-day empty';
+        monthlyGrid.appendChild(emptyDay);
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const date = new Date(year, month, i);
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'monthly-day';
+        dayDiv.innerHTML = `
+            <div>${i}</div>
+            <div class="habit-markers"></div>
+        `;
+        monthlyGrid.appendChild(dayDiv);
+
+        const habitMarkers = dayDiv.querySelector('.habit-markers');
+        habits.forEach(habit => {
+            const hasEntry = habit.log.some(entry => {
+                const entryDate = new Date(entry);
+                return entryDate.toDateString() === date.to
