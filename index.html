@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habit Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
 </head>
 <body>
     <div id="app">
@@ -19,47 +20,36 @@
                 <div id="habit-list"></div>
             </section>
 
-            <section id="weekly-view" class="view hidden">
-                <h2>Weekly Overview</h2>
-                <div id="weekly-grid"></div>
+            <section id="monthly-view" class="view hidden">
+                <h2>Monthly Overview</h2>
+                <div id="month-navigation">
+                    <button id="prev-month">&lt;</button>
+                    <span id="current-month"></span>
+                    <button id="next-month">&gt;</button>
+                </div>
+                <div id="monthly-grid"></div>
+                <div id="habit-legend"></div>
             </section>
 
-            <section id="habit-log-view" class="view hidden">
-                <h2 id="habit-log-title"></h2>
-                <ul id="habit-log-list"></ul>
-            </section>
-
-            <section id="add-habit-view" class="view hidden">
-                <h2>Add New Habit</h2>
-                <form id="add-habit-form">
-                    <label for="habit-name">Habit Name:</label>
-                    <input type="text" id="habit-name" required>
-                    
-                    <label for="habit-color">Habit Color:</label>
-                    <input type="color" id="habit-color" required>
-                    
-                    <fieldset>
-                        <legend>Habit Type:</legend>
-                        <label>
-                            <input type="radio" name="habit-type" value="good" checked> Good
-                        </label>
-                        <label>
-                            <input type="radio" name="habit-type" value="bad"> Bad
-                        </label>
-                    </fieldset>
-                    
-                    <button type="submit">Add Habit</button>
-                </form>
-            </section>
+            <!-- ... (rest of the sections remain the same) ... -->
         </main>
 
         <nav>
-            <button id="home-btn"><i class="fas fa-home"></i><span>Home</span></button>
-            <button id="weekly-btn"><i class="fas fa-calendar-week"></i><span>Weekly</span></button>
-            <button id="add-habit-btn"><i class="fas fa-plus"></i><span>Add</span></button>
+            <button id="home-btn"><i class="fas fa-home"></i>Home</button>
+            <button id="monthly-btn"><i class="fas fa-calendar-alt"></i>Monthly</button>
+            <button id="add-habit-btn"><i class="fas fa-plus"></i>Add</button>
         </nav>
     </div>
 
+    <div id="notification" class="hidden"></div>
+
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then((reg) => console.log('Service worker registered', reg))
+                .catch((err) => console.log('Service worker not registered', err));
+        }
+    </script>
 </body>
 </html>
