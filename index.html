@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4a90e2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div id="app">
         <header>
             <h1>Habit Tracker</h1>
         </header>
-
+        
         <main>
             <section id="home-view" class="view">
                 <h2>Your Habits</h2>
@@ -22,13 +23,7 @@
 
             <section id="monthly-view" class="view hidden">
                 <h2>Monthly Overview</h2>
-                <div id="month-navigation">
-                    <button id="prev-month">&lt;</button>
-                    <span id="current-month"></span>
-                    <button id="next-month">&gt;</button>
-                </div>
                 <div id="monthly-grid"></div>
-                <div id="habit-legend"></div>
             </section>
 
             <section id="habit-log-view" class="view hidden">
@@ -37,14 +32,14 @@
             </section>
 
             <section id="add-habit-view" class="view hidden">
-                <h2>Add New Habit</h2>
+                <h2 id="add-habit-title">Add New Habit</h2>
                 <form id="add-habit-form">
                     <label for="habit-name">Habit Name:</label>
                     <input type="text" id="habit-name" required>
-
+                    
                     <label for="habit-color">Habit Color:</label>
                     <input type="color" id="habit-color" required>
-
+                    
                     <fieldset>
                         <legend>Habit Type:</legend>
                         <label>
@@ -54,12 +49,12 @@
                             <input type="radio" name="habit-type" value="bad"> Bad
                         </label>
                     </fieldset>
-
-                    <button type="submit">Add Habit</button>
+                    
+                    <button type="submit" id="habit-submit-btn">Add Habit</button>
                 </form>
             </section>
         </main>
-
+        
         <nav>
             <button id="home-btn"><i class="fas fa-home"></i>Home</button>
             <button id="monthly-btn"><i class="fas fa-calendar-alt"></i>Monthly</button>
@@ -67,14 +62,18 @@
         </nav>
     </div>
 
-    <div id="notification" class="hidden"></div>
-
     <script src="app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then((reg) => console.log('Service worker registered', reg))
-                .catch((err) => console.log('Service worker not registered', err));
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
         }
     </script>
 </body>
