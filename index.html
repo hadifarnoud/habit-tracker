@@ -4,79 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habit Tracker</title>
-    <link rel="stylesheet" href="/habit-tracker/styles.css">
-    <link rel="manifest" href="/habit-tracker/manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4a90e2">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-<script src="/habit-tracker/app.js"></script>
 </head>
 <body>
-    <div id="app">
-        <header>
-            <h1>Habit Tracker</h1>
-        </header>
-        
-        <main>
-            <section id="home-view" class="view">
-                <h2>Your Habits</h2>
-                <div id="habit-list"></div>
-            </section>
-
-            <section id="monthly-view" class="view hidden">
-                <h2>Monthly Overview</h2>
-                <div id="monthly-grid"></div>
-            </section>
-
-            <section id="habit-log-view" class="view hidden">
-                <h2 id="habit-log-title"></h2>
-                <ul id="habit-log-list"></ul>
-            </section>
-
-            <section id="add-habit-view" class="view hidden">
-                <h2 id="add-habit-title">Add New Habit</h2>
-                <form id="add-habit-form">
-                    <label for="habit-name">Habit Name:</label>
-                    <input type="text" id="habit-name" required>
-                    
-                    <label for="habit-color">Habit Color:</label>
-                    <input type="color" id="habit-color" required>
-                    
-                    <fieldset>
-                        <legend>Habit Type:</legend>
-                        <label>
-                            <input type="radio" name="habit-type" value="good" checked> Good
-                        </label>
-                        <label>
-                            <input type="radio" name="habit-type" value="bad"> Bad
-                        </label>
-                    </fieldset>
-                    
-                    <button type="submit" id="habit-submit-btn">Add Habit</button>
-                </form>
-            </section>
-        </main>
-        
-        <nav>
-            <button id="home-btn"><i class="fas fa-home"></i>Home</button>
-            <button id="monthly-btn"><i class="fas fa-calendar-alt"></i>Monthly</button>
-            <button id="add-habit-btn"><i class="fas fa-plus"></i>Add</button>
-        </nav>
+    <header>
+        <h1>Habit Tracker</h1>
+    </header>
+    <main>
+        <section id="home-view">
+            <h2>Your Habits</h2>
+            <ul id="habit-list"></ul>
+            <button id="add-habit-button">Add Habit</button>
+        </section>
+        <section id="monthly-view" class="hidden">
+            <h2>Monthly View</h2>
+            <div id="calendar"></div>
+        </section>
+    </main>
+    <div id="habit-form-modal" class="modal hidden">
+        <form id="habit-form">
+            <label for="habit-name">Habit Name</label>
+            <input type="text" id="habit-name" required>
+            <label for="habit-type">Habit Type</label>
+            <select id="habit-type" required>
+                <option value="good">Good Habit</option>
+                <option value="bad">Bad Habit</option>
+            </select>
+            <label for="habit-color">Habit Color</label>
+            <input type="color" id="habit-color" required>
+            <button type="submit">Save Habit</button>
+            <button type="button" id="cancel-button">Cancel</button>
+        </form>
     </div>
-
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-    </script>
 </body>
 </html>
