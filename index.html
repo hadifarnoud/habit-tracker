@@ -6,37 +6,43 @@
     <title>Habit Tracker</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4a90e2">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-    <header>
-        <h1>Habit Tracker</h1>
-    </header>
-    <main>
-        <section id="home-view">
-            <h2>Your Habits</h2>
-            <ul id="habit-list"></ul>
-            <button id="add-habit-button">Add Habit</button>
-        </section>
-        <section id="monthly-view" class="hidden">
-            <h2>Monthly View</h2>
-            <div id="calendar"></div>
-        </section>
-    </main>
-    <div id="habit-form-modal" class="modal hidden">
-        <form id="habit-form">
-            <label for="habit-name">Habit Name</label>
-            <input type="text" id="habit-name" required>
-            <label for="habit-type">Habit Type</label>
-            <select id="habit-type" required>
-                <option value="good">Good Habit</option>
-                <option value="bad">Bad Habit</option>
-            </select>
-            <label for="habit-color">Habit Color</label>
-            <input type="color" id="habit-color" required>
-            <button type="submit">Save Habit</button>
-            <button type="button" id="cancel-button">Cancel</button>
-        </form>
+    <div id="app">
+        <header>
+            <h1>Habit Tracker</h1>
+        </header>
+        <main>
+            <section id="home">
+                <h2>My Habits</h2>
+                <ul id="habit-list"></ul>
+                <button id="add-habit-btn">Add Habit</button>
+            </section>
+            <section id="monthly-view" style="display: none;">
+                <h2>Monthly View</h2>
+                <div id="calendar"></div>
+            </section>
+        </main>
+        <nav>
+            <button id="home-btn">Home</button>
+            <button id="monthly-btn">Monthly</button>
+        </nav>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Add Habit</h2>
+            <form id="habit-form">
+                <input type="text" id="habit-name" placeholder="Habit name" required>
+                <input type="color" id="habit-color" required>
+                <select id="habit-type" required>
+                    <option value="good">Good</option>
+                    <option value="bad">Bad</option>
+                </select>
+                <button type="submit">Save</button>
+                <button type="button" id="cancel-btn">Cancel</button>
+            </form>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

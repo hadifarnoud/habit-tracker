@@ -1,79 +1,116 @@
-body {
-    font-family: Arial, sans-serif;
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f0f0f0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 header {
-    background-color: #4a90e2;
-    width: 100%;
     text-align: center;
-    padding: 1em;
-    color: white;
+    margin-bottom: 20px;
 }
 
-main {
-    flex: 1;
-    width: 100%;
-    max-width: 600px;
-    padding: 1em;
+h1, h2 {
+    margin-bottom: 10px;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
 }
 
 #habit-list {
     list-style-type: none;
-    padding: 0;
 }
 
 #habit-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
     border-radius: 5px;
 }
 
-#add-habit-button {
-    padding: 0.5em 1em;
-    font-size: 1em;
-    color: white;
-    background-color: #4a90e2;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.habit-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
-.hidden {
-    display: none;
+.good-habit {
+    border-radius: 50%;
 }
 
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal form {
-    background-color: white;
-    padding: 1em;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
+.bad-habit {
+    border-radius: 0;
 }
 
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
+    margin-top: 20px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    font-size: 12px;
+}
+
+.habit-track {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+#habit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
 }
