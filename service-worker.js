@@ -1,10 +1,10 @@
 const CACHE_NAME = 'habit-tracker-v1';
 const urlsToCache = [
-  '/habit-tracker/',
-  '/habit-tracker/index.html',
-  '/habit-tracker/styles.css',
-  '/habit-tracker/app.js',
-  '/habit-tracker/manifest.json',
+  '/',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'
 ];
 

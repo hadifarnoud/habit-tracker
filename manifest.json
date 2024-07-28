@@ -1,18 +1,18 @@
 {
   "name": "Habit Tracker",
   "short_name": "Habits",
-  "start_url": "/habit-tracker/",
+  "start_url": "https://hadifarnoud.github.io/habit-tracker/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4a90e2",
   "icons": [
     {
-      "src": "/habit-tracker/icon-192x192.png",
+      "src": "/habit-tracker/habit_tracker_icon_192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/habit-tracker/icon-512x512.png",
+      "src": "/habit-tracker/habit_tracker_icon_512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
