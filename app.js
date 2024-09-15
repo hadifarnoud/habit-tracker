@@ -40,6 +40,21 @@ function loadHabits() {
           // Convert to array of date strings
           habit.tracks = habit.tracks.map((track) => track.date);
         }
+      } else {
+        habit.tracks = [];
+      }
+
+      // Assign default startDate if missing
+      if (!habit.startDate) {
+        if (habit.tracks.length > 0) {
+          // Use the earliest tracked date as startDate
+          habit.startDate = habit.tracks.reduce((earliest, date) => {
+            return earliest < date ? earliest : date;
+          });
+        } else {
+          // Default to current date
+          habit.startDate = new Date().toISOString().split("T")[0];
+        }
       }
     });
 
@@ -397,14 +412,129 @@ function renderStatsView() {
 }
 
 function calculateMonthlyAverage() {
-  // ... existing code remains unchanged ...
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const monthStart = new Date(year, month, 1);
+  const monthEnd = new Date(year, month + 1, 0);
+
+  let totalTracks = 0;
+  let totalHabitDays = 0;
+
+  habits.forEach((habit) => {
+    const habitStartDate = new Date(habit.startDate);
+    const startDate = habitStartDate > monthStart ? habitStartDate : monthStart;
+    const endDate = habitStartDate > monthEnd ? habitStartDate : monthEnd;
+
+    const daysInMonth = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+    if (daysInMonth > 0) {
+      totalHabitDays += daysInMonth;
+
+      habit.tracks.forEach((trackDate) => {
+        const date = new Date(trackDate);
+        if (date >= startDate && date <= endDate) {
+          totalTracks++;
+        }
+      });
+    }
+  });
+
+  return totalTracks / (totalHabitDays || 1);
 }
 
 function calculateWeeklyAverage() {
-  // ... existing code remains unchanged ...
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay() + 1); // Monday
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6); // Sunday
+
+  let totalTracks = 0;
+  let totalHabitDays = 0;
+
+  habits.forEach((habit) => {
+    const habitStartDate = new Date(habit.startDate);
+    const startDate = habitStartDate > weekStart ? habitStartDate : weekStart;
+    const endDate = habitStartDate > weekEnd ? habitStartDate : weekEnd;
+
+    const daysInWeek = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+    if (daysInWeek > 0) {
+      totalHabitDays += daysInWeek;
+
+      habit.tracks.forEach((trackDate) => {
+        const date = new Date(trackDate);
+        if (date >= startDate && date <= endDate) {
+          totalTracks++;
+        }
+      });
+    }
+  });
+
+  return totalTracks / (totalHabitDays || 1);
 }
 
-// Functions to calculate per-habit averages remain unchanged
+// Functions to calculate per-habit averages
+function calculateHabitMonthlyAverage(habit) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const monthStart = new Date(year, month, 1);
+  const monthEnd = new Date(year, month + 1, 0);
+
+  const habitStartDate = new Date(habit.startDate);
+  const startDate = habitStartDate > monthStart ? habitStartDate : monthStart;
+  const endDate = habitStartDate > monthEnd ? habitStartDate : monthEnd;
+
+  const daysInMonth = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+  if (daysInMonth <= 0) {
+    return 0;
+  }
+
+  let totalTracks = 0;
+
+  habit.tracks.forEach((trackDate) => {
+    const date = new Date(trackDate);
+    if (date >= startDate && date <= endDate) {
+      totalTracks++;
+    }
+  });
+
+  return totalTracks / daysInMonth;
+}
+
+function calculateHabitWeeklyAverage(habit) {
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay() + 1); // Monday
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6); // Sunday
+
+  const habitStartDate = new Date(habit.startDate);
+  const startDate = habitStartDate > weekStart ? habitStartDate : weekStart;
+  const endDate = habitStartDate > weekEnd ? habitStartDate : weekEnd;
+
+  const daysInWeek = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+  if (daysInWeek <= 0) {
+    return 0;
+  }
+
+  let totalTracks = 0;
+
+  habit.tracks.forEach((trackDate) => {
+    const date = new Date(trackDate);
+    if (date >= startDate && date <= endDate) {
+      totalTracks++;
+    }
+  });
+
+  return totalTracks / daysInWeek;
+}
 
 function showNotification(message, duration = 3000) {
   const notification = document.getElementById("notification");
