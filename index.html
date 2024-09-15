@@ -1,49 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Habit Tracker</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet"
+    />
 </head>
 <body>
     <div id="app">
         <header>
             <h1>Habit Tracker</h1>
         </header>
+
+        <nav>
+            <button id="home-btn" class="nav-btn active">Home</button>
+            <button id="monthly-btn" class="nav-btn">Monthly</button>
+            <button id="stats-btn" class="nav-btn">Stats</button>
+        </nav>
+
         <main>
-            <section id="home">
+            <section id="home" class="section">
                 <h2>My Habits</h2>
                 <ul id="habit-list"></ul>
-                <button id="add-habit-btn">Add Habit</button>
+                <button id="add-habit-btn" class="fab">+</button>
             </section>
-            <section id="monthly-view" style="display: none;">
+
+            <section id="monthly-view" class="section" style="display: none">
                 <h2>Monthly View</h2>
+                <div id="month-navigation">
+                    <button id="prev-month" class="arrow-btn">&#8249;</button>
+                    <span id="current-month"></span>
+                    <button id="next-month" class="arrow-btn">&#8250;</button>
+                </div>
                 <div id="calendar"></div>
             </section>
+
+            <section id="stats-view" class="section" style="display: none">
+                <h2>Statistics</h2>
+                <div id="stats-container">
+                    <div class="stat-card">
+                        <h3>Monthly Average</h3>
+                        <p id="monthly-average"></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Weekly Average</h3>
+                        <p id="weekly-average"></p>
+                    </div>
+                </div>
+                <h3>All Tracked Habits</h3>
+                <ul id="all-habits-list"></ul>
+            </section>
         </main>
-        <nav>
-            <button id="home-btn">Home</button>
-            <button id="monthly-btn">Monthly</button>
-        </nav>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2 id="modal-title">Add Habit</h2>
-            <form id="habit-form">
-                <input type="text" id="habit-name" placeholder="Habit name" required>
-                <input type="color" id="habit-color" required>
-                <select id="habit-type" required>
-                    <option value="good">Good</option>
-                    <option value="bad">Bad</option>
-                </select>
-                <button type="submit">Save</button>
-                <button type="button" id="cancel-btn">Cancel</button>
-            </form>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <h2 id="modal-title">Add Habit</h2>
+                <form id="habit-form">
+                    <input
+                        type="text"
+                        id="habit-name"
+                        placeholder="Habit name"
+                        required
+                    />
+                    <input type="color" id="habit-color" required />
+                    <select id="habit-type" required>
+                        <option value="good">Good</option>
+                        <option value="bad">Bad</option>
+                    </select>
+                    <input type="date" id="habit-start-date" required />
+                    <button type="submit">Save</button>
+                    <button type="button" id="cancel-btn">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- New Tracking Modal -->
+        <div id="tracking-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="tracking-modal-title">Tracking Log</h2>
+                <ul id="tracking-list"></ul>
+                <button type="button" id="tracking-cancel-btn">Close</button>
+            </div>
         </div>
     </div>
+
+    <div id="notification" class="notification"></div>
+
     <script src="app.js"></script>
 </body>
 </html>

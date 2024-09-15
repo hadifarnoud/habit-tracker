@@ -1,3 +1,4 @@
+/* Reset and base styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,30 +6,67 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Roboto", sans-serif;
     line-height: 1.6;
     color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    background-color: #fff;
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-h1, h2 {
-    margin-bottom: 10px;
-}
-
-button {
-    cursor: pointer;
-    padding: 5px 10px;
     background-color: #007bff;
     color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8f9fa;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-btn {
+    background: none;
     border: none;
-    border-radius: 3px;
+    font-size: 16px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+.nav-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 20px;
+}
+
+main {
+    padding: 20px;
 }
 
 #habit-list {
@@ -39,25 +77,46 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .habit-icon {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 15px;
 }
 
 .good-habit {
-    border-radius: 50%;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 .bad-habit {
-    border-radius: 0;
+    border-radius: 50%;
+}
+
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 24px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.fab:hover {
+    background-color: #0056b3;
 }
 
 #calendar {
@@ -71,46 +130,210 @@ button {
     aspect-ratio: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: #f4f4f4;
-    font-size: 12px;
+    background-color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tracks-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.tracks-container .habit-track {
+    margin: 2px;
 }
 
 .habit-track {
-    width: 10px;
-    height: 10px;
-    margin: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
 }
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #fff;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    border-radius: 10px;
+    width: 90%;
     max-width: 500px;
 }
 
 #habit-form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
-nav {
+#habit-form input,
+#habit-form select,
+#habit-form button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#habit-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#habit-form button:hover {
+    background-color: #0056b3;
+}
+
+#month-navigation {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.arrow-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+#current-month {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.stat-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#all-habits-list {
+    list-style-type: none;
+}
+
+#all-habits-list li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.notification {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: #4caf50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1001;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* Styles for the tracking modal */
+#tracking-modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+#tracking-modal .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+}
+
+#tracking-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#tracking-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#tracking-list input[type="date"] {
+    flex: 1;
+    margin-right: 10px;
+}
+
+#tracking-list button {
+    margin-left: 5px;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .nav-btn {
+        font-size: 14px;
+    }
+
+    #habit-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #habit-list li > div {
+        margin-top: 10px;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    .calendar-day {
+        font-size: 12px;
+    }
 }
